@@ -21,8 +21,8 @@
  * are defined.  For example, the function named helper is called
  * in main before it is defined, so I declare it here. 
  */
-char tokenizeUserInput(char userInput[80]);
-
+char *tokenizeUserInput(char userInput[80]);
+int executeCommand(char *command, char *commandList[ARGV_SIZE]);
 
 
 /* This is the main function of your project, and it will be run
@@ -33,13 +33,13 @@ int main(int argc, char *argv[])
 	char userInput[80] = "";
 
 	//char workingDirectory[1024] = getCurrentWorkingDirectory();
-        char *myArgv[ARGV_SIZE];  // an array of pointers to strings
-
-  	//myArgv[0] = "ls";
+        // an array of pointers to strings
+	char *myArgv[ARGV_SIZE];
+  	myArgv[0] = "ls";
   	//myArgv[1] = "-aux";
   	//myArgv[2] = NULL;  // last element should be a NULL pointer
 
-  	//execvp(myArgv[0], myArgv);
+  	execvp(myArgv[0], myArgv);
         //We just have user input and make sure that the user wants to keep entering words until they enter quit
         while(1){
         	printf("prompt$ ");
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
                         break;
 		}
 		tokenizeUserInput(userInput);
-		
+				
 	}	
 	return 0; /* Success */
 }
@@ -60,13 +60,13 @@ int main(int argc, char *argv[])
 /* Comments describing what each function does must be included on 
  * top of each function.  -5 pts for each undocumented function.
  */
-char tokenizeUserInput(char userInput[80])
+char *tokenizeUserInput(char userInput[80])
 {
         char *list;
         int count;
         count = 0;
         list = strtok(userInput," ");
-	char *argList[15];
+	char *argList[ARGV_SIZE];
         //This list just increments each time the strtok finds a word and will go until there is none left
         while(list != NULL )
         {
@@ -77,14 +77,22 @@ char tokenizeUserInput(char userInput[80])
                 count += 1;
 		
         }
-	printf("%s",argList[0]);
-        return argList;
+	
+	executeCommand(argList[0], argList);
+        return *argList;
 }
 
-int executeCommand(char command[15])
+int executeCommand(char *command, char *commandList[ARGV_SIZE])
 {
-
-
+	printf("%s",command);
+	pid_t pid;
+	printf("%i",pid);
+	command = "ls";
+	execvp(command,commandList);
+	if ((pid = fork()) == 0) {
+		//execvp(command,commandList);
+	}
+	waitpid();
 
 
 
