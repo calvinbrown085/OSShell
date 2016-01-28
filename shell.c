@@ -35,11 +35,11 @@ int main(int argc, char *argv[])
 	//char workingDirectory[1024] = getCurrentWorkingDirectory();
         char *myArgv[ARGV_SIZE];  // an array of pointers to strings
 
-  	myArgv[0] = "ls";
-  	myArgv[1] = "-aux";
-  	myArgv[2] = NULL;  // last element should be a NULL pointer
+  	//myArgv[0] = "ls";
+  	//myArgv[1] = "-aux";
+  	//myArgv[2] = NULL;  // last element should be a NULL pointer
 
-  	execvp(myArgv[0], myArgv);
+  	//execvp(myArgv[0], myArgv);
         //We just have user input and make sure that the user wants to keep entering words until they enter quit
         while(1){
         	printf("prompt$ ");
@@ -50,8 +50,8 @@ int main(int argc, char *argv[])
                         printf("Exiting!\n");
                         break;
 		}
-	//	tokenizeUserInput(userInput);
-		execvp(myArgv[0],myArgv);
+		tokenizeUserInput(userInput);
+		
 	}	
 	return 0; /* Success */
 }
@@ -66,18 +66,19 @@ char tokenizeUserInput(char userInput[80])
         int count;
         count = 0;
         list = strtok(userInput," ");
-	
+	char *argList[15];
         //This list just increments each time the strtok finds a word and will go until there is none left
         while(list != NULL )
         {
 		
-		printf("%s\n",list);
+		argList[count] = list;
                 list = strtok(NULL, " ");
 		
                 count += 1;
 		
         }
-        return 0;
+	printf("%s",argList[0]);
+        return argList;
 }
 
 int executeCommand(char command[15])
