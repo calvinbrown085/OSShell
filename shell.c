@@ -71,15 +71,12 @@ char *tokenizeUserInput(char userInput[80])
         while(list != NULL )
         {
 
-		argList[count] = list;
+								argList[count] = list;
                 printf("%s\n",list);
                 list = strtok(NULL, " ");
-
-
                 count += 1;
 
         }
-
 
         return *argList;
 }
