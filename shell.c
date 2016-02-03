@@ -73,12 +73,12 @@ char *tokenizeUserInput(char userInput[80])
 		
 		argList[count] = list;
                 list = strtok(NULL, " ");
-		
+		printf("%s", list);
                 count += 1;
 		
         }
 	
-	executeCommand(argList[0], argList);
+	
         return *argList;
 }
 
