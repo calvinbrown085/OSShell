@@ -19,7 +19,7 @@
 
 /* Declarations go here for functions that are called before they
  * are defined.  For example, the function named helper is called
- * in main before it is defined, so I declare it here. 
+ * in main before it is defined, so I declare it here.
  */
 char *tokenizeUserInput(char userInput[80]);
 int executeCommand(char *command, char *commandList[ARGV_SIZE]);
@@ -51,13 +51,13 @@ int main(int argc, char *argv[])
                         break;
 		}
 		tokenizeUserInput(userInput);
-				
-	}	
+
+	}
 	return 0; /* Success */
 }
 
 
-/* Comments describing what each function does must be included on 
+/* Comments describing what each function does must be included on
  * top of each function.  -5 pts for each undocumented function.
  */
 char *tokenizeUserInput(char userInput[80])
@@ -70,15 +70,17 @@ char *tokenizeUserInput(char userInput[80])
         //This list just increments each time the strtok finds a word and will go until there is none left
         while(list != NULL )
         {
-		
+
 		argList[count] = list;
+                printf("%s\n",list);
                 list = strtok(NULL, " ");
-		
+
+
                 count += 1;
-		
+
         }
-	
-	executeCommand(argList[0], argList);
+
+
         return *argList;
 }
 
@@ -87,8 +89,6 @@ int executeCommand(char *command, char *commandList[ARGV_SIZE])
 	printf("%s",command);
 	pid_t pid;
 	printf("%i",pid);
-	command = "ls";
-	execvp(command,commandList);
 	if ((pid = fork()) == 0) {
 		//execvp(command,commandList);
 	}
