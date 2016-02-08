@@ -12,15 +12,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-
-/* I don't want to see any global variables in this program. -5 pts
- * for any global variable used. */
 #define ARGV_SIZE 10
 
-/* Declarations go here for functions that are called before they
- * are defined.  For example, the function named helper is called
- * in main before it is defined, so I declare it here.
- */
 char *tokenizeUserInput(char userInput[80]);
 int executeCommand(char *command, char *commandList[ARGV_SIZE]);
 char printWorkingDirectory();
@@ -33,26 +26,20 @@ char printWorkingDirectoryForInput();
 int main(int argc, char *argv[])
 {
 	char userInput[80] = "";
-	char *myArgv[ARGV_SIZE];  // an array of pointers to strings
-
-  	myArgv[0] = "ps";
-  	myArgv[1] = "-aux";
- 	 myArgv[2] = NULL;  // last element should be a NULL pointer	
-
         while(1){
         	printWorkingDirectoryForInput();
                 fgets(userInput, 80, stdin);
 
-		//printf("Compare %i\n",strcmp(userInput,"cd"));		
+		//printf("Compare %i\n",strcmp(userInput,"cd"));
                 if(strcmp(userInput, "exit") == 10){
                         printf("Exiting!\n");
                         break;
 		}
-		
+
 		else if (strcmp(userInput, "cd") == 32){
-			//grabSecondCommand(userInput);
-			//changeDirectory(grabSecondCommand(userInput));
-			executeCommand(myArgv[0],myArgv);
+			grabSecondCommand(userInput);
+			changeDirectory(grabSecondCommand(userInput));
+
 		}
 		else{
 			tokenizeUserInput(userInput);
@@ -77,13 +64,13 @@ char *tokenizeUserInput(char userInput[80])
         {
 
 		argList[count] = list;
-                
+
                 list = strtok(NULL, " ");
                 count += 1;
 
         }
-	printf("%s\n", argList[1]);
-	//executeCommand(argList[0],argList);
+
+	executeCommand(argList[0],argList);
 
         return *argList;
 }
@@ -91,34 +78,23 @@ char *tokenizeUserInput(char userInput[80])
 int executeCommand(char *command, char *commandList[ARGV_SIZE])
 {
   char *myArgv[ARGV_SIZE];  // an array of pointers to strings
-   
-  myArgv[0] = "pwd";
-  myArgv[1] = NULL;  
-  myArgv[2] = NULL;  // last element should be a NULL pointer
+
+  myArgv[0] = command;
+  myArgv[ARGV_SIZE] = NULL;  // last element should be a NULL pointer
   pid_t pid;
   if ((pid = fork()) == 0) {
-        printf("\n");	
+        printf("\n");
   	execvp(myArgv[0], myArgv);
+
   }
-  waitpid(); 
-  
+  waitpid();
+
   return 0; // should not be reached
 
 }
 
 
-char printWorkingDirectory()
-{
-   char cwd[1024];
-   if (getcwd(cwd, sizeof(cwd)) != NULL)
-       fprintf(stdout, "%s\n", cwd);
-   else
-       perror("getcwd() error");
-   return 0;
 
-
-
-}
 char printWorkingDirectoryForInput()
 {
    char cwd[1024];
@@ -128,12 +104,12 @@ char printWorkingDirectoryForInput()
        perror("getcwd() error");
    return 0;
 
-
-
 }
+
+
 void changeDirectory(char userInput[80])
 {
-	printf("%s",userInput);
+	printf("%s\n",userInput);
 	chdir("cd");
 }
 
@@ -153,6 +129,6 @@ char * grabSecondCommand(char userInput[80])
                 count += 1;
 
         }
-	
+
 	return argList[1];
 }
