@@ -26,32 +26,33 @@ int executeCommand(char *command, char *commandList[ARGV_SIZE]);
 char printWorkingDirectory();
 void changeDirectory(char userInput[80]);
 char * grabSecondCommand(char userInput[80]);
+char printWorkingDirectoryForInput();
 /* This is the main function of your project, and it will be run
  * first before all other functions.
  */
 int main(int argc, char *argv[])
 {
 	char userInput[80] = "";
-	
-	//char workingDirectory[1024] = getCurrentWorkingDirectory();
-        // an array of pointers to strings
- 	printf("Compare %i\n",strcmp(userInput,"cd"));	
-        //We just have user input and make sure that the user wants to keep entering words until they enter quit
+	char *myArgv[ARGV_SIZE];  // an array of pointers to strings
+
+  	myArgv[0] = "ps";
+  	myArgv[1] = "-aux";
+ 	 myArgv[2] = NULL;  // last element should be a NULL pointer	
+
         while(1){
-        	printf("prompt$ ");
+        	printWorkingDirectoryForInput();
                 fgets(userInput, 80, stdin);
 
 		//printf("Compare %i\n",strcmp(userInput,"cd"));		
-                if(strcmp(userInput, "quit") == 10){
+                if(strcmp(userInput, "exit") == 10){
                         printf("Exiting!\n");
                         break;
 		}
-		else if(strcmp(userInput, "pwd") == 10){
-			printWorkingDirectory();
-		}
+		
 		else if (strcmp(userInput, "cd") == 32){
 			//grabSecondCommand(userInput);
-			changeDirectory(grabSecondCommand(userInput));
+			//changeDirectory(grabSecondCommand(userInput));
+			executeCommand(myArgv[0],myArgv);
 		}
 		else{
 			tokenizeUserInput(userInput);
@@ -91,16 +92,16 @@ int executeCommand(char *command, char *commandList[ARGV_SIZE])
 {
   char *myArgv[ARGV_SIZE];  // an array of pointers to strings
    
-  myArgv[0] = command;
-  myArgv[1] = "-a";
+  myArgv[0] = "pwd";
+  myArgv[1] = NULL;  
   myArgv[2] = NULL;  // last element should be a NULL pointer
   pid_t pid;
   if ((pid = fork()) == 0) {
-    	
+        printf("\n");	
   	execvp(myArgv[0], myArgv);
   }
-  waitpid();
-  printf("\nprompt$ ");
+  waitpid(); 
+  
   return 0; // should not be reached
 
 }
@@ -118,10 +119,22 @@ char printWorkingDirectory()
 
 
 }
+char printWorkingDirectoryForInput()
+{
+   char cwd[1024];
+   if (getcwd(cwd, sizeof(cwd)) != NULL)
+       fprintf(stdout, "%s/$ ", cwd);
+   else
+       perror("getcwd() error");
+   return 0;
+
+
+
+}
 void changeDirectory(char userInput[80])
 {
 	printf("%s",userInput);
-	chdir(userInput);
+	chdir("cd");
 }
 
 char * grabSecondCommand(char userInput[80])
@@ -142,5 +155,4 @@ char * grabSecondCommand(char userInput[80])
         }
 	
 	return argList[1];
-
 }
