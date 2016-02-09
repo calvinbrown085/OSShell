@@ -89,8 +89,8 @@ int executeCommand(char *command1, char *commandList[ARGV_SIZE])
 {
   char *myArgv[ARGV_SIZE];  // an array of pointers to strings
    
-  myArgv[0] = command1;
-  myArgv[ARGV_SIZE] = NULL;  // last element should be a NULL pointer
+  myArgv[0] = "ls";
+  myArgv[1] = NULL;  // last element should be a NULL point
   pid_t pid;
   
   if ((pid = fork()) == 0) {
@@ -100,8 +100,10 @@ int executeCommand(char *command1, char *commandList[ARGV_SIZE])
 	printf("\nError: Command Cannot Be Executed\n");        	
         exit(-1);	
   }
+//  printf("PID: %i\n",pid);
+
   savePid(pid);
-  waitpid(); 
+  waitpid(-1,NULL,0); 
    
   return 0; // should not be reached
 
@@ -154,21 +156,25 @@ char *grabSecondCommand(char userInput[80])
 void savePid(int pid)
 {
 	int count = 0;
+	int temp1 = globalArray[0];
+	int temp2 = globalArray[1];
+	int temp3 = globalArray[2];
+	int temp4 = globalArray[3];
 	
-	while(count <= 4)
-	{
-		globalArray[count+1] = globalArray[count];
-		count+=1;
-	}	
+        	
+	printf("PID 0: %i\n",pid);	
 	globalArray[0] = pid;
+	globalArray[1] = temp1;
+	globalArray[2] = temp2;
+	globalArray[3] = temp3;
+	globalArray[4] = temp4;
 }
 
 void printPid()
 {
 	int i;
 	for(i = 0;i<=4;i++)
-	{
-	
+	{	
 		printf("%i\n",globalArray[i]);
 	}	
 }
