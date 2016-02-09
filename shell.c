@@ -18,10 +18,10 @@ int *globalArray;
 void printPid();
 void savePid(int pid);
 char *tokenizeUserInput(char userInput[80]);
-int executeCommand(char *command, char *commandList[ARGV_SIZE]);
+int executeCommand(char *command1, char *commandList[ARGV_SIZE]);
 char printWorkingDirectory();
 void changeDirectory(char userInput[80]);
-char * grabSecondCommand(char userInput[80]);
+char *grabSecondCommand(char userInput[80]);
 char printWorkingDirectoryForInput();
 
 /* This is the main function of your project, and it will be run
@@ -35,14 +35,14 @@ int main(int argc, char *argv[])
         	printWorkingDirectoryForInput();
                 fgets(userInput, 80, stdin);
 
-		printf("Compare %i\n",strcmp(userInput,"showpid"));		
+		//printf("Compare %i\n",strcmp(userInput,"showpid"));		
                 if(strcmp(userInput, "exit") == 10){
                         printf("Exiting!\n");
                         break;
 		}
 		
 		else if (strcmp(userInput, "cd") == 32){
-			grabSecondCommand(userInput);
+			//grabSecondCommand(userInput);
 			changeDirectory(grabSecondCommand(userInput));
 			
 		}
@@ -50,8 +50,10 @@ int main(int argc, char *argv[])
 			printPid();
 		}
 		else{
+ 			
 			tokenizeUserInput(userInput);
 		}
+		
 	}
 	return 0; /* Success */
 }
@@ -83,18 +85,19 @@ char *tokenizeUserInput(char userInput[80])
         return *argList;
 }
 
-int executeCommand(char *command, char *commandList[ARGV_SIZE])
+int executeCommand(char *command1, char *commandList[ARGV_SIZE])
 {
   char *myArgv[ARGV_SIZE];  // an array of pointers to strings
    
-  myArgv[0] = command; 
+  myArgv[0] = command1;
   myArgv[ARGV_SIZE] = NULL;  // last element should be a NULL pointer
   pid_t pid;
   
   if ((pid = fork()) == 0) {
-	
-	printf("\n");         	
+        	
+	         	
   	execvp(myArgv[0], myArgv);
+	printf("\nError: Command Cannot Be Executed\n");        	
         exit(-1);	
   }
   savePid(pid);
@@ -120,11 +123,15 @@ char printWorkingDirectoryForInput()
 
 void changeDirectory(char userInput[80])
 {
-	printf("%s\n",userInput);
-	chdir("cd");
+	char *myArgv[ARGV_SIZE];
+	myArgv[0] = userInput;
+  	myArgv[1] = NULL;
+	printf("%s\n",myArgv[0]);
+	printf("Compare: %i\n",strcmp("hello",userInput));
+	chdir("hello");
 }
 
-char * grabSecondCommand(char userInput[80])
+char *grabSecondCommand(char userInput[80])
 {
 	char *list;
 	list = strtok(userInput," ");
@@ -140,7 +147,7 @@ char * grabSecondCommand(char userInput[80])
                 count += 1;
 
         }
-	
+   		
 	return argList[1];
 }
 
