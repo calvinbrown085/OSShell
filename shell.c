@@ -89,7 +89,7 @@ int executeCommand(char *command1, char *commandList[ARGV_SIZE])
 {
   char *myArgv[ARGV_SIZE];  // an array of pointers to strings
    
-  myArgv[0] = "ls";
+  myArgv[0] = strtok(command1, "\n");;
   myArgv[1] = NULL;  // last element should be a NULL point
   pid_t pid;
   
@@ -97,7 +97,7 @@ int executeCommand(char *command1, char *commandList[ARGV_SIZE])
         	
 	         	
   	execvp(myArgv[0], myArgv);
-	printf("\nError: Command Cannot Be Executed\n");        	
+	printf("Error: Command Cannot Be Executed\n");        	
         exit(-1);	
   }
 //  printf("PID: %i\n",pid);
@@ -126,11 +126,9 @@ char printWorkingDirectoryForInput()
 void changeDirectory(char userInput[80])
 {
 	char *myArgv[ARGV_SIZE];
-	myArgv[0] = userInput;
+	myArgv[0] = strtok(userInput, "\n");
   	myArgv[1] = NULL;
-	printf("%s\n",myArgv[0]);
-	printf("Compare: %i\n",strcmp("hello",userInput));
-	chdir("hello");
+	chdir(myArgv[0]);
 }
 
 char *grabSecondCommand(char userInput[80])
@@ -162,7 +160,7 @@ void savePid(int pid)
 	int temp4 = globalArray[3];
 	
         	
-	printf("PID 0: %i\n",pid);	
+		
 	globalArray[0] = pid;
 	globalArray[1] = temp1;
 	globalArray[2] = temp2;
