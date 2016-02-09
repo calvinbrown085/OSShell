@@ -1,7 +1,19 @@
 Readme For Shell
 
-Step 1. run ./a.out from the directory that you have the shell.c file in
-Step 2. It will show up with prompt$ and you can enter anything you want
-Step 3. It will execute these commands that you give it, it will also print out an error if you give it a wrong command.
-Step 4. Type quit to be done with the program.
-Step 5. You're Done!
+Names: Calvin Brown and Chad Gilmer
+Files:
+1. Compile: This program is a script for compiling the shell.c file
+2. Shell: This is the executable for shell.c
+3. Shell.c: This is the file to compile that contains the shell program.
+Instructions for compiling:
+All you have is run ./compile and it will compile your program for you. 
+Instructions for running:
+All you have to do is run ./shell and it will run for you.
+Challanges:
+Show pid function was difficult
+The newline character on the end of user input was difficult
+Tokenizing user input
+Displaying of the showpid function was kinda difficult.
+Sources:
+stack overflow 
+http://www.cs.uni.edu/~diesburg/courses/cs3430_sp16/recitations/r02/r02.html
