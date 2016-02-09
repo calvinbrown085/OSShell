@@ -18,7 +18,7 @@ int *globalArray;
 void printPid();
 void savePid(int pid);
 char *tokenizeUserInput(char userInput[80]);
-int executeCommand(char *command1, char *commandList[ARGV_SIZE]);
+int executeCommand(char *commandList[ARGV_SIZE],int count);
 char printWorkingDirectory();
 void changeDirectory(char userInput[80]);
 char *grabSecondCommand(char userInput[80]);
@@ -79,18 +79,21 @@ char *tokenizeUserInput(char userInput[80])
                 count += 1;
 
         }
-	
-	executeCommand(argList[0],argList);
+	executeCommand(argList,count);
 
         return *argList;
 }
 
-int executeCommand(char *command1, char *commandList[ARGV_SIZE])
+int executeCommand(char *commandList[ARGV_SIZE],int count)
 {
   char *myArgv[ARGV_SIZE];  // an array of pointers to strings
-   
-  myArgv[0] = strtok(command1, "\n");;
-  myArgv[1] = NULL;  // last element should be a NULL point
+  int i;
+  
+  for(i=0;i<count;i++)
+  {
+	myArgv[i] = strtok(commandList[i],"\n");
+  }
+  myArgv[i] = NULL;
   pid_t pid;
   
   if ((pid = fork()) == 0) {
