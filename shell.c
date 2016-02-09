@@ -13,33 +13,41 @@
 #include <sys/types.h>
 
 #define ARGV_SIZE 10
+int *globalArray;
 
+void printPid();
+void savePid(int pid);
 char *tokenizeUserInput(char userInput[80]);
 int executeCommand(char *command, char *commandList[ARGV_SIZE]);
 char printWorkingDirectory();
 void changeDirectory(char userInput[80]);
 char * grabSecondCommand(char userInput[80]);
 char printWorkingDirectoryForInput();
+
 /* This is the main function of your project, and it will be run
  * first before all other functions.
  */
 int main(int argc, char *argv[])
 {
+	globalArray = malloc(5 * sizeof *globalArray);
 	char userInput[80] = "";
         while(1){
         	printWorkingDirectoryForInput();
                 fgets(userInput, 80, stdin);
 
-		//printf("Compare %i\n",strcmp(userInput,"cd"));
+		printf("Compare %i\n",strcmp(userInput,"showpid"));		
                 if(strcmp(userInput, "exit") == 10){
                         printf("Exiting!\n");
                         break;
 		}
-
+		
 		else if (strcmp(userInput, "cd") == 32){
 			grabSecondCommand(userInput);
 			changeDirectory(grabSecondCommand(userInput));
-
+			
+		}
+		else if(strcmp(userInput, "showpid") == 10){
+			printPid();
 		}
 		else{
 			tokenizeUserInput(userInput);
@@ -64,12 +72,12 @@ char *tokenizeUserInput(char userInput[80])
         {
 
 		argList[count] = list;
-
+                
                 list = strtok(NULL, " ");
                 count += 1;
 
         }
-
+	
 	executeCommand(argList[0],argList);
 
         return *argList;
@@ -78,23 +86,26 @@ char *tokenizeUserInput(char userInput[80])
 int executeCommand(char *command, char *commandList[ARGV_SIZE])
 {
   char *myArgv[ARGV_SIZE];  // an array of pointers to strings
-
-  myArgv[0] = command;
+   
+  myArgv[0] = command; 
   myArgv[ARGV_SIZE] = NULL;  // last element should be a NULL pointer
   pid_t pid;
+  
   if ((pid = fork()) == 0) {
-        printf("\n");
+	
+	printf("\n");         	
   	execvp(myArgv[0], myArgv);
-
+        exit(-1);	
   }
-  waitpid();
-
+  savePid(pid);
+  waitpid(); 
+   
   return 0; // should not be reached
 
 }
 
 
-
+ 
 char printWorkingDirectoryForInput()
 {
    char cwd[1024];
@@ -129,6 +140,29 @@ char * grabSecondCommand(char userInput[80])
                 count += 1;
 
         }
-
+	
 	return argList[1];
 }
+
+void savePid(int pid)
+{
+	int count = 0;
+	
+	while(count <= 4)
+	{
+		globalArray[count+1] = globalArray[count];
+		count+=1;
+	}	
+	globalArray[0] = pid;
+}
+
+void printPid()
+{
+	int i;
+	for(i = 0;i<=4;i++)
+	{
+	
+		printf("%i\n",globalArray[i]);
+	}	
+}
+
